@@ -6,27 +6,27 @@ library(XML)
 remove(list=ls())
 
 #set the working directory in your machine with the file named "custumers.csv" contained
-setwd("")
+setwd("C:\\Users\\*****\\Desktop\\")
 
 customers = read.csv("customers.csv", header=TRUE)
 
 #function - domains from South Africa (.co.za) are being searched
 getGoogleURL = function(search.term, domain = '.co.za', quotes=TRUE) {
-  search.term <- gsub(' ', '%20', search.term)
-  if(quotes) search.term <- paste('%22', search.term, '%22', sep='') 
-  getGoogleURL <- paste('http://www.google', domain, '/search?q=', search.term, sep='') }
+  search.term = gsub(' ', '+', search.term)
+  if(quotes) search.term = paste('', search.term, '', sep='')
+  getGoogleURL = paste('http://www.google', domain, '/search?q=', search.term, sep='') }
 
 #setup results dataframe and allow some time to run
 res = ''
 for (i in 1:nrow(customers)) { 
   search.term = as.character(customers[i,])
   doc = htmlParse(getGoogleURL(search.term=search.term, quotes="FALSE"))
-  result = xpathSApply(doc,"//span[@class='_tA']", xmlValue)
+  result = xpathSApply(doc,"//span[@class='A1t5ne']", xmlValue)
   res[i] = result[1] }
 
 #apply conversions and add resultant dataset to original file
 res = as.character(res)
 customers$address = paste0(res)
 
-#produce results back to csv format
+#produce results back to text format
 write.table(customers,file="custinfo.txt", row.names = FALSE, quote = FALSE, sep = ';')
